@@ -1,3 +1,4 @@
+// Inisialisasi Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDY-3QUGeshEhuVU0g5JwNpZd2oYAYwR9A",
     authDomain: "forum-diskus.firebaseapp.com",
@@ -7,73 +8,113 @@ const firebaseConfig = {
     appId: "1:434039824623:web:8f2bbc06217bd06fd4bb1a",
   };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-const db = firebase.database();
-
-function loadCategories() {
-    const categoryList = document.getElementById('categoryList');
-    db.ref('categories').on('value', snapshot => {
-        categoryList.innerHTML = '';
-        snapshot.forEach(categorySnapshot => {
-            const category = categorySnapshot.val();
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#">${category.name}</a>`;
-            categoryList.appendChild(li);
-        });
-    });
-}
-
-// Function to load topics from Firebase
-function loadTopics() {
-    const topicList = document.getElementById('topicList');
-    db.ref('topics').on('value', snapshot => {
-        topicList.innerHTML = '';
-        snapshot.forEach(topicSnapshot => {
-            const topic = topicSnapshot.val();
-            const div = document.createElement('div');
-            div.classList.add('topic');
-            div.innerHTML = `
-                <h3><a href="#">${topic.title}</a></h3>
-                <p>Ditulis oleh <strong>${topic.author}</strong> pada ${topic.date}</p>
-                <p>${topic.content}</p>
-            `;
-            topicList.appendChild(div);
-        });
-    });
-}
-
-// Load categories and topics when page loads
-window.onload = () => {
-    loadCategories();
-    loadTopics();
-};
-
-// Modal functionality
+// Elemen modal
 const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const closeLoginModal = document.getElementById('closeLoginModal');
+const closeSignupModal = document.getElementById('closeSignupModal');
+const signupLink = document.getElementById('signupLink');
 const loginLink = document.getElementById('loginLink');
-const closeModal = document.getElementById('closeModal');
 
-loginLink.onclick = () => {
-    loginModal.style.display = 'flex';
-};
+// SweetAlert2 Toast Configuration
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+    }
+});
 
-closeModal.onclick = () => {
+// Event untuk membuka modal pendaftaran dari login
+signupLink.addEventListener('click', () => {
     loginModal.style.display = 'none';
-};
+    signupModal.style.display = 'flex';
+});
 
-window.onclick = (event) => {
+// Event untuk membuka modal login dari pendaftaran
+loginLink.addEventListener('click', () => {
+    signupModal.style.display = 'none';
+    loginModal.style.display = 'flex';
+});
+
+// Event untuk menutup modal login
+closeLoginModal.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+});
+
+// Event untuk menutup modal pendaftaran
+closeSignupModal.addEventListener('click', () => {
+    signupModal.style.display = 'none';
+});
+
+// Event untuk login
+document.getElementById('loginForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // Firebase Authentication logic untuk login
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            console.log('Login successful:', userCredential.user);
+            loginModal.style.display = 'none';
+            // Tampilkan toast notification menggunakan SweetAlert2
+            Toast.fire({
+                icon: 'success',
+                title: 'Signed in successfully'
+            });
+            // Anda bisa melakukan redirect atau tindakan setelah login berhasil di sini
+        })
+        .catch((error) => {
+            console.error('Error during login:', error);
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Login failed: ' + error.message,
+                icon: 'error'
+            });
+        });
+});
+
+// Event untuk mendaftarkan user baru
+document.getElementById('signupForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+
+    // Firebase Authentication untuk pendaftaran
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            console.log('Registration successful:', userCredential.user);
+            signupModal.style.display = 'none';
+            Swal.fire({
+                title: 'Good job!',
+                text: 'Registration successful! Please log in.',
+                icon: 'success'
+            });
+        })
+        .catch((error) => {
+            console.error('Error during sign up:', error);
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Registration failed: ' + error.message,
+                icon: 'error'
+            });
+        });
+});
+
+// Menutup modal saat klik di luar area modal
+window.addEventListener('click', (event) => {
     if (event.target === loginModal) {
         loginModal.style.display = 'none';
+    } else if (event.target === signupModal) {
+        signupModal.style.display = 'none';
     }
-};
-
-// Handle login form submission
-document.getElementById('loginForm').onsubmit = (event) => {
-    event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    // Replace this with your actual login logic
-    alert(`Username: ${username}\nPassword: ${password}`);
-    loginModal.style.display = 'none';
-};
+});
