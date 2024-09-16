@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum Diskusi</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/firebase-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
@@ -28,23 +31,41 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Forum Diskusi</p>
+        <p>&copy; 2024 JarssDev. All Right Reserved</p>
     </footer>
-    <div id="loginModal" class="modal">
+
+    <!-- Modal Login -->
+    <div id="loginModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
         <div class="modal-content">
-            <span class="close-btn" id="closeModal">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            <span class="close-btn" id="closeLoginModal" aria-label="Close">&times;</span>
+            <h2 id="loginTitle">Login</h2>
+            <form id="loginForm" method="POST">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" name="loginEmail" required>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="loginPassword" required>
                 <button type="submit">Login</button>
+            </form>
+            <p>Belum punya akun? <a href="#" id="signupLink">Daftar di sini</a></p>
+        </div>
+    </div>
+
+    <!-- Modal Sign-Up -->
+    <div id="signupModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="signupTitle" aria-modal="true">
+        <div class="modal-content">
+            <span class="close-btn" id="closeSignupModal" aria-label="Close">&times;</span>
+            <h2 id="signupTitle">Daftar</h2>
+            <form id="signupForm" method="POST">
+                <label for="signupEmail">Email:</label>
+                <input type="email" id="signupEmail" name="signupEmail" required>
+                <label for="signupPassword">Password:</label>
+                <input type="password" id="signupPassword" name="signupPassword" required>
+                <button type="submit">Daftar</button>
             </form>
         </div>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+
+    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
