@@ -1,4 +1,3 @@
-// Inisialisasi Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDY-3QUGeshEhuVU0g5JwNpZd2oYAYwR9A",
     authDomain: "forum-diskus.firebaseapp.com",
