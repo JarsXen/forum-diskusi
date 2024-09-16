@@ -1,3 +1,4 @@
+/* General Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -12,7 +13,6 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
 }
 
 header h1 {
@@ -40,10 +40,12 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: #666;
+    cursor: pointer; /* Memastikan link bisa diklik */
 }
 
 main {
     padding: 20px;
+    min-height: 100vh; /* Menjaga konten tetap memenuhi layar */
 }
 
 .categories, .topics {
@@ -91,10 +93,12 @@ footer {
     background-color: #4a4a4a;
     color: white;
     text-align: center;
-    padding: 15px;
-    position: fixed;
+    padding: 10px 0; /* Mengurangi ukuran padding */
     width: 100%;
+    position: relative; /* Menggunakan relative agar footer berada di bawah konten */
     bottom: 0;
+    left: 0;
+    font-size: 14px; /* Ukuran font dikurangi agar tidak terlalu besar */
 }
 
 /* Modal Styles */
@@ -110,15 +114,27 @@ footer {
     background-color: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal.hide {
+    display: none;
+    opacity: 0;
 }
 
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
+    width: 90%; 
     max-width: 500px;
+    margin: auto; /* Modal berada di tengah secara horizontal */
     position: relative;
 }
 
@@ -132,7 +148,7 @@ footer {
 }
 
 .modal-content input {
-    width: calc(100% - 22px);
+    width: 100%; 
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -159,4 +175,15 @@ footer {
     right: 15px;
     font-size: 24px;
     cursor: pointer;
+}
+
+/* Responsive Navigation */
+@media screen and (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        text-align: center;
+    }
+    nav ul li {
+        margin-bottom: 10px;
+    }
 }
