@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum Diskusi</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/firebase-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -31,7 +29,7 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 JarssDev. All Right Reserved</p>
+        <p>&copy; 2024 Forum Diskusi</p>
     </footer>
 
     <!-- Modal Login -->
@@ -40,10 +38,10 @@
             <span class="close-btn" id="closeLoginModal" aria-label="Close">&times;</span>
             <h2 id="loginTitle">Login</h2>
             <form id="loginForm" method="POST">
-                <label for="loginEmail">Email:</label>
-                <input type="email" id="loginEmail" name="loginEmail" required>
-                <label for="loginPassword">Password:</label>
-                <input type="password" id="loginPassword" name="loginPassword" required>
+                <label for="username">Email:</label>
+                <input type="email" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
                 <button type="submit">Login</button>
             </form>
             <p>Belum punya akun? <a href="#" id="signupLink">Daftar di sini</a></p>
@@ -66,6 +64,62 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="script.js"></script>
+    <script>
+        // Modal functionality
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const loginLink = document.getElementById('loginLink');
+        const signupLink = document.getElementById('signupLink');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeSignupModal = document.getElementById('closeSignupModal');
+
+        function showModal(modal) {
+            modal.classList.add('show');
+            modal.classList.remove('hide');
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        function hideModal(modal) {
+            modal.classList.add('hide');
+            modal.classList.remove('show');
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        loginLink.addEventListener('click', () => {
+            showModal(loginModal);
+        });
+
+        signupLink.addEventListener('click', () => {
+            hideModal(loginModal);
+            showModal(signupModal);
+        });
+
+        closeLoginModal.addEventListener('click', () => {
+            hideModal(loginModal);
+        });
+
+        closeSignupModal.addEventListener('click', () => {
+            hideModal(signupModal);
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                hideModal(loginModal);
+            } else if (event.target === signupModal) {
+                hideModal(signupModal);
+            }
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                if (loginModal.classList.contains('show')) {
+                    hideModal(loginModal);
+                }
+                if (signupModal.classList.contains('show')) {
+                    hideModal(signupModal);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
